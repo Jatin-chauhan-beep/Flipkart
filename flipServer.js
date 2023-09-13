@@ -13171,7 +13171,13 @@ app.get("/reviews", (req, res) => {
     });
   } else res.send({ review: reviews });
 });
-
+app.get("/product/:id", (req, res) => {
+  let id = req.params.id;
+  let mob = mobiles.find((f) => f.id === id);
+  if (mob) {
+    res.send(mob);
+  } else res.status(404).send("not Found");
+});
 app.get("/allreviews/:id", (req, res) => {
   let id = req.params.id;
   let arr = reviews.find((f) => f.mobileId === id).ratings;
@@ -13239,4 +13245,19 @@ app.get("/pincode/:code/:id", (req, res) => {
     if (check) res.send({ delivery: check.display });
     else res.status(404).send("Not deliverable");
   } else res.status(404).send("Not deliverable");
+});
+
+app.post("/product", (req, res) => {
+  let body = req.body;
+  mobiles.push(body);
+  res.send(body);
+});
+
+app.put("/product", (req, res) => {
+  let body = req.body;
+  let index = mobiles.findIndex((f) => f.id === body.id);
+  if (index >= 0) {
+    mobiles[index] = body;
+    res.send(body);
+  } else res.status(404).send("not Found");
 });
